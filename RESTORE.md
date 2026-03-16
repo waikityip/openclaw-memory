@@ -131,3 +131,42 @@ playwright install chromium
 
 *创建于 2026-03-01*
 *仓库: waikityip/openclaw-memory*
+
+
+---
+
+## 附錄：WhatsApp 配對流程
+
+如果新嘅 Kimi Claw 要同你個 WhatsApp 號碼重新連接，跟住以下步驟：
+
+### 配對步驟
+
+1. **用戶發送訊息**
+   用你個 WhatsApp 號碼（`+85291242623`）send 個訊息畀 bot 嘅 WhatsApp 號碼
+
+2. **收到配對碼**
+   Bot 會回覆一個 pairing code，例如：
+   ```
+   Pairing code: XXXXXXXX
+   Ask the bot owner to approve with:
+   openclaw pairing approve whatsapp XXXXXXXX
+   ```
+
+3. **批准配對**
+   喺 server 上 run：
+   ```bash
+   openclaw pairing approve whatsapp [PAIRING_CODE]
+   ```
+
+4. **測試**
+   再 send 個訊息，確認 bot 回覆正常
+
+### 注意事項
+
+- Pairing code 會喺幾分鐘之內過期，要快
+- 如果過期咗，要重新 send 訊息攞過個新 code
+
+---
+
+*WhatsApp 配對資訊更新於：2026-03-17*
+*已配對號碼：+85291242623*
