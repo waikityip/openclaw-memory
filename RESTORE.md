@@ -213,3 +213,53 @@ A: 睇 OpenClaw log，會有 "WhatsApp gateway connected as +85253826963" 嘅訊
 *WhatsApp 配對資訊更新於：2026-03-17*
 *已配對號碼：+85291242623*
 *Bot WhatsApp 號碼：+85253826963*
+
+
+---
+
+## 附錄：Gmail 設定
+
+Kimi Claw 可以讀取同發送 Gmail 郵件。
+
+### 賬戶資訊
+
+| 項目 | 內容 |
+|------|------|
+| **Email** | clawandrew81@gmail.com |
+| **用途** | AI 專用郵箱（收發系統通知、備份報告）|
+| **App Password** | ⚠️ **需向用戶查詢**（安全起見，唔會儲存在檔案）|
+
+### 復活後設定步驟
+
+1. **詢問用戶 App Password**
+   
+   向 Andrew 問：
+   > "Gmail 需要 App Password 先可以連接。請提供 clawandrew81@gmail.com 嘅 App Password。"
+
+2. **驗證連接**
+   ```bash
+   curl -s --url "imaps://imap.gmail.com:993/INBOX" \
+        --user "clawandrew81@gmail.com:[APP_PASSWORD]" \
+        -X "SEARCH UNSEEN"
+   ```
+
+3. **更新 TOOLS.md**
+   記錄低 App Password（本地使用，唔會 commit 上 GitHub）
+
+### 生成 App Password 方法
+
+如果用戶需要重新生成：
+1. 去 https://myaccount.google.com/apppasswords
+2. 登入 clawandrew81@gmail.com
+3. 選擇「郵件」→「其他（自訂名稱）」→ 輸入 "OpenClaw"
+4. 複製生成嘅 16 位密碼（例如：`xxxx xxxx xxxx xxxx`）
+
+### 注意事項
+
+- App Password **唔會**儲存在 GitHub（私隱安全）
+- 每次復活後需要重新詢問
+- 如果驗證失敗，可能係密碼過期，需要重新生成
+
+---
+
+*Gmail 設定更新於：2026-03-17*
