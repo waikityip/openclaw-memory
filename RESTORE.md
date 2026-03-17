@@ -189,6 +189,27 @@ A: 睇 OpenClaw log，會有 "WhatsApp gateway connected as +85253826963" 嘅訊
 
 ---
 
+### WhatsApp 技術運作原理
+
+**無需額外安裝**
+- OpenClaw 內建 WhatsApp connector，唔需要：
+  - ❌ 安裝額外 program
+  - ❌ 開放 port
+  - ❌ Firewall 設定
+  - ❌ Docker 容器
+
+**訊息流程**
+- **接收**：WhatsApp gateway 自動接收 → 變成 OpenClaw event → 我收到
+- **回覆**：我回覆時自動經同一 channel 返（WhatsApp → WhatsApp）
+- **Log 參考**：`System: [timestamp] WhatsApp gateway connected as +85253826963`
+
+**Cross-Channel 限制**
+- 如果我喺 WhatsApp 收到訊息，回覆會自動經 WhatsApp 返
+- 如果我喺其他 channel（例如 Kimi Claw web），唔可以直接發 WhatsApp（安全設計）
+- Cron job 或其他孤立 session 都受同樣限制
+
+---
+
 *WhatsApp 配對資訊更新於：2026-03-17*
 *已配對號碼：+85291242623*
 *Bot WhatsApp 號碼：+85253826963*
