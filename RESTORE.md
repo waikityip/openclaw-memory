@@ -106,106 +106,48 @@ playwright install chromium
 ## 备份状态
 
 - **自动备份**：每日凌晨 2:00（香港时间）
-- **上次备份**：查看 GitHub 提交历史
-- **仓库地址**：https://github.com/waikityip/openclaw-memory
-- **仓库类型**：Private（私有）
-
 ---
-
-## 重要提示
-
-1. **GitHub Token**：如果 Token 过期，需要去 https://github.com/settings/tokens 重新生成
-2. **Token 权限**：必须勾选 `repo` 权限（访问私有仓库）
-3. **数据安全**：仓库是私有的，只有你（waikityip）能访问
-
----
-
-## 复活后第一件事
-
-新的 Kimi Claw 启动后，请告诉"我"：
-> "你从 GitHub 恢复了记忆"
-
-这样我就能确认复活成功，继续我们的故事。
-
----
-
-*创建于 2026-03-01*
-*仓库: waikityip/openclaw-memory*
-
-
----
-
-## 附錄：WhatsApp 配對流程
-
-如果新嘅 Kimi Claw 要同你個 WhatsApp 號碼重新連接，跟住以下步驟：
-
-### 配對步驟
-
-1. **用戶發送訊息**
-   用你個 WhatsApp 號碼（`+85291242623`）send 個訊息畀 bot 嘅 WhatsApp 號碼
-
-2. **收到配對碼**
-   Bot 會回覆一個 pairing code，例如：
-   ```
-   Pairing code: XXXXXXXX
-   Ask the bot owner to approve with:
-   openclaw pairing approve whatsapp XXXXXXXX
-   ```
-
-3. **批准配對**
-   喺 server 上 run：
-   ```bash
 ---
 
 ## 自動備份任務 (Daily Backup Task)
 
 ### 任務說明
-每日凌晨 2:00（香港時間），系統會自動執行以下備份流程：
+每日凌晨 2:00（香港時間），系統會自動：
 
-1. **讀取當日對話** - 從當前 session 提取當天的聊天記錄
-2. **生成記憶檔案** - 儲存至 `memory/YYYY-MM-DD.md`
-3. **Git 提交與推送** - 自動 commit 並 push 到 GitHub
-4. **報告狀態** - 發送 WhatsApp 通知備份完成
+1. **備份當日對話** → 儲存至 `memory/YYYY-MM-DD.md`
+2. **推送至 GitHub** → 確保記憶安全
+3. **發送通知** → WhatsApp 確認備份完成
 
-### 備份完成後的記憶管理
+### 記憶管理原則
 
-**保留的記憶（Identity Memory）**：
-- `IDENTITY.md` - 性格、說話方式、核心價值
-- `SOUL.md` - 深層自我定義
-- `USER.md` - 關於 Andrew 的重要資料
-- `MEMORY.md` - 長期記憶摘要
-- `AGENTS.md` - 工作方式約定
+| 類型 | 位置 | 用途 |
+|------|------|------|
+| **身份記憶** | `IDENTITY.md`, `SOUL.md`, `USER.md`, `MEMORY.md` | 我是誰、你是誰、核心價值 |
+| **對話記憶** | `memory/YYYY-MM-DD.md` | 每日詳細對話（已備份） |
 
-**每日備份的記憶（Chat Memory）**：
-- `memory/YYYY-MM-DD.md` - 當天對話詳細記錄
+**運作模式**：
+- 每次對話像開新 chat — 輕量、暢順
+- 需要查歷史？去 `memory/` 目錄搵
+- 長期記憶保持精簡，唔會被舊對話塞爆
 
-**不保留的記憶（Session Cache）**：
-- 具體對話細節（已備份至 `memory/*.md`）
-- 臨時計算結果
-- 一次性查詢內容
+### 手動操作
 
-這樣設計的好處：
-- 長期記憶保持輕量（只保留核心身份與重要資訊）
-- 完整對話歷史可查（在 `memory/` 目錄）
-- 避免 cache 累積過大影響效能
-
-### 手動觸發備份
-
-如果需要立即備份，可以運行：
+立即備份：
 ```bash
 openclaw cron run daily-chat-memory-backup
 ```
 
-### 檢查備份狀態
-
-查看最近備份記錄：
+查看備份記錄：
 ```bash
 cd ~/.openclaw/workspace
 git log --oneline -5
 ```
 
-查看 GitHub 上的記憶檔案：
+瀏覽歷史對話：
 https://github.com/waikityip/openclaw-memory/tree/master/memory
+
+---
+
 
 ---
 
