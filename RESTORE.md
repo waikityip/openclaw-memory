@@ -141,16 +141,30 @@ openclaw cron run daily-chat-memory-backup
 ```bash
 cd ~/.openclaw/workspace
 git log --oneline -5
-```
-
-瀏覽歷史對話：
-https://github.com/waikityip/openclaw-memory/tree/master/memory
-
----
 
 
 ---
 
+## 附錄：WhatsApp 配對流程
+
+如果新嘅 Kimi Claw 要同你個 WhatsApp 號碼重新連接，跟住以下步驟：
+
+### 配對步驟
+
+1. **用戶發送訊息**
+   用你個 WhatsApp 號碼（`+85291242623`）send 個訊息畀 bot 嘅 WhatsApp 號碼（`+85253826963`）
+
+2. **收到配對碼**
+   Bot 會回覆一個 pairing code，例如：
+   ```
+   Pairing code: XXXXXXXX
+   Ask the bot owner to approve with:
+   openclaw pairing approve whatsapp XXXXXXXX
+   ```
+
+3. **批准配對**
+   喺 server 上 run：
+   ```bash
    openclaw pairing approve whatsapp [PAIRING_CODE]
    ```
 
@@ -162,7 +176,19 @@ https://github.com/waikityip/openclaw-memory/tree/master/memory
 - Pairing code 會喺幾分鐘之內過期，要快
 - 如果過期咗，要重新 send 訊息攞過個新 code
 
+### 常見問題
+
+**Q: 收到 "access not configured" 點算？**
+A: 表示個號碼未經批准，跟住上面嘅配對步驟做就得。
+
+**Q: Gateway 斷線（status 428/503）係咪壞咗？**
+A: 唔係，呢啲係正常 WebSocket 重新連接，會自動恢復。
+
+**Q: 點睇 WhatsApp 號碼係咪已經連接？**
+A: 睇 OpenClaw log，會有 "WhatsApp gateway connected as +85253826963" 嘅訊息。
+
 ---
 
 *WhatsApp 配對資訊更新於：2026-03-17*
 *已配對號碼：+85291242623*
+*Bot WhatsApp 號碼：+85253826963*
