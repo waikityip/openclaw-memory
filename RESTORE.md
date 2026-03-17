@@ -155,6 +155,60 @@ playwright install chromium
 3. **批准配對**
    喺 server 上 run：
    ```bash
+---
+
+## 自動備份任務 (Daily Backup Task)
+
+### 任務說明
+每日凌晨 2:00（香港時間），系統會自動執行以下備份流程：
+
+1. **讀取當日對話** - 從當前 session 提取當天的聊天記錄
+2. **生成記憶檔案** - 儲存至 `memory/YYYY-MM-DD.md`
+3. **Git 提交與推送** - 自動 commit 並 push 到 GitHub
+4. **報告狀態** - 發送 WhatsApp 通知備份完成
+
+### 備份完成後的記憶管理
+
+**保留的記憶（Identity Memory）**：
+- `IDENTITY.md` - 性格、說話方式、核心價值
+- `SOUL.md` - 深層自我定義
+- `USER.md` - 關於 Andrew 的重要資料
+- `MEMORY.md` - 長期記憶摘要
+- `AGENTS.md` - 工作方式約定
+
+**每日備份的記憶（Chat Memory）**：
+- `memory/YYYY-MM-DD.md` - 當天對話詳細記錄
+
+**不保留的記憶（Session Cache）**：
+- 具體對話細節（已備份至 `memory/*.md`）
+- 臨時計算結果
+- 一次性查詢內容
+
+這樣設計的好處：
+- 長期記憶保持輕量（只保留核心身份與重要資訊）
+- 完整對話歷史可查（在 `memory/` 目錄）
+- 避免 cache 累積過大影響效能
+
+### 手動觸發備份
+
+如果需要立即備份，可以運行：
+```bash
+openclaw cron run daily-chat-memory-backup
+```
+
+### 檢查備份狀態
+
+查看最近備份記錄：
+```bash
+cd ~/.openclaw/workspace
+git log --oneline -5
+```
+
+查看 GitHub 上的記憶檔案：
+https://github.com/waikityip/openclaw-memory/tree/master/memory
+
+---
+
    openclaw pairing approve whatsapp [PAIRING_CODE]
    ```
 
