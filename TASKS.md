@@ -296,7 +296,98 @@ openclaw cron run --id <任務ID>
 
 ---
 
-## 用戶工作流程 (User Workflows)
+## 待辦任務（需用戶跟進）
+
+以下任務等待用戶確認或提供資訊後才能繼續：
+
+### 🔌 1. N8n 連接設置
+
+**狀態**: ⏳ 等待用戶確認網絡配置
+
+**描述**: 設置 OpenClaw 與用戶 private cloud N8n 的 webhook 連接
+
+**需要確認**:
+- [ ] N8n 是否有 public URL？（例如 `https://n8n.yourdomain.com`）
+- [ ] 還是淨係內網？（`http://192.168.1.x:5678`）
+- [ ] 還是與 OpenClaw 同雲（阿里云）？
+
+**下一步**:
+1. 用戶確認 N8n 網絡位置
+2. 在 N8n 創建第一個 Webhook workflow
+3. 測試連接（發送測試訊息）
+
+**參考文件**: `RESTORE.md` → 「附錄：N8n 整合規劃」
+
+---
+
+### 🛠️ 2. OpenClaw Skill 安裝
+
+**狀態**: ⏳ 需要安裝額外 CLI 工具
+
+**待安裝 Skill**:
+
+| Skill | 用途 | 所需工具 | 安裝方法 |
+|-------|------|---------|---------|
+| **Summarize** (#10) | 智能內容摘要 | `summarize` CLI | `brew install summarize` 或從源碼編譯 |
+| **GitHub** (#9) | 代碼倉庫管理 | `gh` CLI | `brew install gh` |
+
+**替代方案**:
+- **Summarize**: 可用我現有能力直接幫用戶摘要
+- **GitHub**: 可用 `git` command + GitHub API 直接操作
+
+**優先級**: 中（可用替代方案暫時處理）
+
+---
+
+### 📄 3. LinkedIn Profile 內容整理
+
+**狀態**: ⏳ 等待用戶提供內容
+
+**描述**: 嘗試自動化訪問 LinkedIn 失敗（需要登入，有被封號風險）
+
+**解決方案**:
+- 用戶手動 copy-paste LinkedIn profile 內容
+- 我幫手整理 / 分析 / 改寫
+
+**需要內容**:
+- [ ] About section
+- [ ] Experience 工作經歷
+- [ ] Skills 技能
+- [ ] Recent activities 近期動態
+
+**下一步**:
+1. 用戶 copy LinkedIn 內容
+2. 貼上到 WhatsApp
+3. 我整理並更新到 `USER.md`
+
+---
+
+### 🔧 4. Tavily / Eleven Labs 整合
+
+**狀態**: ⏳ 需要 API Key
+
+**描述**: 文章推薦的 #6 Tavily 和 #8 Eleven Labs 技能
+
+**所需**:
+- **Tavily**: 需要申請 API key（https://tavily.com）
+- **Eleven Labs**: 已有 `sag` skill 可用，或申請 API key
+
+**優先級**: 低（非緊急，可按需要再設置）
+
+---
+
+## 任務優先級總覽
+
+| 優先級 | 任務 | 狀態 |
+|--------|------|------|
+| 🔴 **高** | N8n 連接設置 | 等待用戶確認網絡配置 |
+| 🟡 **中** | Skill 安裝（Summarize/GitHub）| 可用替代方案 |
+| 🟡 **中** | LinkedIn 內容整理 | 等待用戶提供 |
+| 🟢 **低** | Tavily/Eleven Labs | 需要 API key |
+
+---
+
+*待辦任務更新時間: 2026-03-19*
 
 ### LinkedIn 帖子創作流程
 
