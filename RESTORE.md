@@ -168,17 +168,102 @@ git log --oneline -5
 
 ---
 
-## 附錄：WhatsApp 配對流程
+## 附錄：WhatsApp 完整設置指南
 
-如果新嘅 Kimi Claw 要同你個 WhatsApp 號碼重新連接，跟住以下步驟：
+### 情境 A：全新 OpenClaw 安裝（重生）
 
-### 配對步驟
+當 Kimi Claw 喺全新機器上復活，需要完整設置 WhatsApp：
+
+#### Step 1: 安裝 WhatsApp 插件
+```bash
+openclaw plugins install @openclaw/whatsapp
+```
+
+#### Step 2: 重啟 Gateway 載入插件
+```bash
+openclaw gateway restart
+# 或者用 SIGUSR1 平滑重啟
+```
+
+#### Step 3: 掃描 QR Code 登入
+```bash
+openclaw channels login
+```
+
+會顯示 QR code，用戶需要：
+1. 打開手機 WhatsApp
+2. 設定 → 已連結裝置 → 連結裝置
+3. 掃描終端機上嘅 QR code
+4. 等候顯示 "✅ Linked! Credentials saved"
+
+#### Step 4: 設置 Allowlist（安全限制）
+```bash
+# 只允許 Andrew 嘅兩個號碼發訊息
+openclaw config set channels.whatsapp.accounts.default.allowFrom '["+85291242623", "+85254213906"]'
+```
+
+#### Step 5: 再次重啟 Gateway 應用設定
+```bash
+openclaw gateway restart
+```
+
+#### Step 6: 測試
+用戶發送訊息到 `+85253826963`，確認收到回覆。
+
+---
+
+### 情境 B：WhatsApp 連接斷開（重連）
+
+當 WhatsApp 顯示 `disconnected` 或 `WebSocket Error`：
+
+#### 檢查狀態
+```bash
+openclaw channels status
+```
+
+如果見到：
+```
+- WhatsApp default: enabled, configured, linked, stopped, disconnected
+error:{"code":"ETIMEDOUT","message":"WebSocket Error ()"}
+```
+
+#### 重連步驟
+
+**方法 1：簡單重連（推薦）**
+```bash
+openclaw channels login
+```
+
+如果 credentials 仍然有效，會自動重連，唔需要再掃 QR code。
+
+**方法 2：強制重新登入（如果方法 1 失敗）**
+```bash
+# 先登出
+openclaw channels logout whatsapp
+
+# 再重新登入
+openclaw channels login
+# 需要重新掃描 QR code
+```
+
+**方法 3：Gateway 完全重啟**
+```bash
+openclaw gateway restart
+# 等 10-15 秒後檢查狀態
+openclaw channels status
+```
+
+---
+
+### 情境 C：配對模式（Pairing Mode）
+
+如果 WhatsApp 設置為 `dmPolicy: "pairing"`，新號碼需要配對：
 
 1. **用戶發送訊息**
-   用你個 WhatsApp 號碼（`+85291242623`）send 個訊息畀 bot 嘅 WhatsApp 號碼（`+85253826963`）
+   用你個 WhatsApp 號碼 send 個訊息畀 bot（`+85253826963`）
 
 2. **收到配對碼**
-   Bot 會回覆一個 pairing code，例如：
+   Bot 會回覆一個 pairing code：
    ```
    Pairing code: XXXXXXXX
    Ask the bot owner to approve with:
@@ -186,29 +271,57 @@ git log --oneline -5
    ```
 
 3. **批准配對**
-   喺 server 上 run：
    ```bash
    openclaw pairing approve whatsapp [PAIRING_CODE]
    ```
 
-4. **測試**
-   再 send 個訊息，確認 bot 回覆正常
+4. **查看待處理配對請求**
+   ```bash
+   openclaw pairing list whatsapp
+   ```
 
-### 注意事項
+---
 
-- Pairing code 會喺幾分鐘之內過期，要快
-- 如果過期咗，要重新 send 訊息攞過個新 code
+### 常用診斷命令
+
+```bash
+# 查看 WhatsApp 詳細狀態
+openclaw channels status
+
+# 查看有咩 channel 已配置
+openclaw channels list
+
+# 查看待處理配對請求
+openclaw pairing list whatsapp
+
+# 查看系統日誌（實時）
+openclaw logs --follow
+
+# 查看 WhatsApp 相關日誌
+tail -f /root/.openclaw/logs/openclaw.log | grep -i whatsapp
+```
+
+---
 
 ### 常見問題
 
 **Q: 收到 "access not configured" 點算？**
-A: 表示個號碼未經批准，跟住上面嘅配對步驟做就得。
+A: 表示個號碼未經批准，需要用戶發送訊息啟動配對流程，或用 `openclaw pairing approve` 批准。
 
-**Q: Gateway 斷線（status 428/503）係咪壞咗？**
-A: 唔係，呢啲係正常 WebSocket 重新連接，會自動恢復。
+**Q: Gateway 斷線（status 428/503/ETIMEDOUT）係咪壞咗？**
+A: 唔係，呢啟係 WhatsApp Web 常見嘅 WebSocket 重新連接。通常自動恢復，如果唔得就 run `openclaw channels login`。
 
 **Q: 點睇 WhatsApp 號碼係咪已經連接？**
-A: 睇 OpenClaw log，會有 "WhatsApp gateway connected as +85253826963" 嘅訊息。
+A: 睇 `openclaw channels status` 應該顯示 `linked, running, connected`。
+
+**Q: 點解我發咗訊息但 bot 收唔到？**
+A: 檢查：
+1. `openclaw channels status` 係咪顯示 `connected`
+2. 你個號碼係咪喺 allowlist 入面
+3. 如果係 pairing mode，係咪已經批准配對
+
+**Q: QR code 過期咗點算？**
+A: 中斷登入（Ctrl+C），重新 run `openclaw channels login`，會生成新 QR code。
 
 ---
 
@@ -233,9 +346,19 @@ A: 睇 OpenClaw log，會有 "WhatsApp gateway connected as +85253826963" 嘅訊
 
 ---
 
-*WhatsApp 配對資訊更新於：2026-03-17*
-*已配對號碼：+85291242623*
-*Bot WhatsApp 號碼：+85253826963*
+### 當前配置
+
+| 項目 | 內容 |
+|------|------|
+| **Bot WhatsApp 號碼** | +85253826963 |
+| **已授權號碼** | +85291242623 (Andrew 個人), +85254213906 (Andrew 工作) |
+| **DM Policy** | pairing |
+| **Group Policy** | allowlist |
+
+---
+
+*WhatsApp 設置指南更新於：2026-03-21*
+*更新內容：加入重生/重連完整流程*
 
 
 ---
