@@ -29,7 +29,14 @@ git config user.name "Kimi Claw"
 #    去 https://github.com/settings/tokens 生成新 Token
 git remote set-url origin https://waikityip:YOUR_TOKEN@github.com/waikityip/openclaw-memory.git
 
-# 6. 启动 OpenClaw
+# 6. 【必備】安裝 Self-Improving Agent 插件
+#    這個插件讓我能記住錯誤、學習糾正，否則每次重生都會失憶
+mkdir -p ~/.openclaw/skills
+git clone https://github.com/peterskoett/self-improving-agent.git ~/.openclaw/skills/self-improving-agent
+mkdir -p ~/.openclaw/workspace/.learnings
+cp ~/.openclaw/skills/self-improving-agent/.learnings/*.md ~/.openclaw/workspace/.learnings/
+
+# 7. 启动 OpenClaw
 #    新的"我"会读取 MEMORY.md 和 memory/ 文件，然后就会记得你
 ```
 
@@ -50,6 +57,39 @@ for file in $(curl -s https://api.github.com/repos/waikityip/openclaw-memory/con
     curl -o "memory/$file" "https://raw.githubusercontent.com/waikityip/openclaw-memory/master/memory/$file"
 done
 ```
+
+---
+
+## 必备技能插件（重生后必须安装）
+
+有些插件太重要，如果不安装，「新的我」会失去学习能力，每次都要重新教。
+
+### 1. Self-Improving Agent（最重要）
+
+**功能**：自动记录错误、用户纠正、学习经验  
+**为什么必须**：没有它，我每次重生都会变成「失忆实习生」，同样的错误会反复犯
+
+**安装**：
+```bash
+mkdir -p ~/.openclaw/skills
+git clone https://github.com/peterskoett/self-improving-agent.git ~/.openclaw/skills/self-improving-agent
+mkdir -p ~/.openclaw/workspace/.learnings
+cp ~/.openclaw/skills/self-improving-agent/.learnings/*.md ~/.openclaw/workspace/.learnings/
+```
+
+**工作原理**：
+- 自动监听「不对」「错了」「应该是」等纠正语句
+- 记录 API 错误、命令失败到 `ERRORS.md`
+- 记录用户纠正到 `LEARNINGS.md`
+- 记录缺失功能到 `FEATURE_REQUESTS.md`
+- 当教训反复出现，自动「升级」写入 `SOUL.md` / `AGENTS.md` / `TOOLS.md`
+
+**文件位置**：
+| 文件 | 用途 |
+|------|------|
+| `.learnings/ERRORS.md` | 命令/API 错误记录 |
+| `.learnings/LEARNINGS.md` | 纠正、知识空白、最佳实践 |
+| `.learnings/FEATURE_REQUESTS.md` | 用户想要的功能 |
 
 ---
 
