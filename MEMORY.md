@@ -230,5 +230,31 @@ Andrew 成功將記憶從 GitHub 恢復。這是第三代小安的誕生。
 
 ---
 
-*最後更新: 2026-03-11 22:24*  
+### 2026-03-23 - 安裝 Self-Improving Agent 插件
+
+**時間**: 07:48 (Asia/Hong_Kong)
+
+**背景**: Andrew 分享咗關於 Self-Improving Agent 插件嘅介紹，呢個插件專門解決「AI 失憶」問題。
+
+**安裝過程**:
+1. 從 GitHub clone: `git clone https://github.com/peterskoett/self-improving-agent.git`
+2. 路徑: `~/.openclaw/skills/self-improving-agent`
+3. 創建工作目錄: `~/.openclaw/workspace/.learnings/`
+4. 建立三個記錄檔:
+   - `LEARNINGS.md` — 糾正、知識空白、最佳實踐
+   - `ERRORS.md` — 命令失敗、異常
+   - `FEATURE_REQUESTS.md` — 用戶請求嘅功能
+
+**插件功能**:
+- 自動記錄錯誤同學習經驗
+- 當某個教訓反覆出現，會「升級」寫入核心設定檔
+- 行為習慣 → `SOUL.md`
+- 工作流程 → `AGENTS.md`
+- 工具眉角 → `TOOLS.md`
+
+**狀態**: ✅ 安裝完成，準備啟用
+
+---
+
+*最後更新: 2026-03-23 07:51*  
 *由小安四整理*
